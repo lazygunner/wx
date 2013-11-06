@@ -8,9 +8,10 @@ app.config["SECRET_KEY"] = "kalashinikov"
 
 db = MongoEngine(app)
 
-#def register_blueprints(app):
-
-#register_blueprints(app)
+def register_blueprints(app):
+    from views import view
+    app.register_blueprint(view)
+register_blueprints(app)
 
 
 app.debug=True
