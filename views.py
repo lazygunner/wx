@@ -22,7 +22,8 @@ def wechat_auth():
         s = ''.join(s)
         if (hashlib.sha1(s).hexdigest() == signature):
             return make_response(echostr)
-     if request.method == 'POST':
+            
+    if request.method == 'POST':
         xml_recv = ET.fromstring(request.data)
         ToUserName = xml_recv.find("ToUserName").text  
         FromUserName = xml_recv.find("FromUserName").text
@@ -30,12 +31,12 @@ def wechat_auth():
 
         if(MsgType == "text"):
             Content = xml_recv.find("Content").text
-            reply = "<xml><ToUserName><![CDATA[%s]]>
-            </ToUserName><FromUserName><![CDATA[%s]]>
-            </FromUserName><CreateTime>%s</CreateTime>
-            <MsgType><![CDATA[text]]>
-            </MsgType><Content><![CDATA[%s]]></Content>
-            <FuncFlag>0</FuncFlag></xml>"
+            reply = "<xml><ToUserName><![CDATA[%s]]>" +\
+                "</ToUserName><FromUserName><![CDATA[%s]]>" +\
+                "</FromUserName><CreateTime>%s</CreateTime>" +\
+                "<MsgType><![CDATA[text]]>" +\
+                "</MsgType><Content><![CDATA[%s]]></Content>" +\
+                "<FuncFlag>0</FuncFlag></xml>"
             response = make_response(reply % (FromUserName, ToUserName, 
             str(int(time.time())), 'HaHa:' + Content ) )
             response.content_type = 'application/xml'
