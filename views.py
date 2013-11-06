@@ -45,11 +45,16 @@ def wechat_auth():
                 str(int(time.time())), 'HaHa:' + Content ) )
             response.content_type = 'application/xml'
             return response
-         elif(MsgType == 'subscribe'):
-            Content = xml_recv.find("Content").text
-            response = make_response(text_reply % \
-                (FromUserName, ToUserName, \
-                str(int(time.time())), 'Welcome to Gunner\'s WeiXin!') )
-            response.content_type = 'application/xml'
-            return response
+        
+        elif(MsgType == 'event'):
+            Event = xml_recv.find("Event").text
+            if(Event == 'subscribe'):
+                Content = xml_recv.find("Content").text
+                    response = make_response(text_reply % \
+                    (FromUserName, ToUserName, \
+                    str(int(time.time())), 'Welcome to Gunner\'s WeiXin!') )
+                response.content_type = 'application/xml'
+                return response
+            elif(Event == 'unsubscribe'):
+                return ''
 
