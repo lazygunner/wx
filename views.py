@@ -27,7 +27,7 @@ def wechat_auth():
         xml_recv = ET.fromstring(request.data)
         ToUserName = xml_recv.find("ToUserName").text  
         FromUserName = xml_recv.find("FromUserName").text
-        MsgType = xml_resv.find("MsgType").text
+        MsgType = xml_recv.find("MsgType").text
 
         if(MsgType == "text"):
             Content = xml_recv.find("Content").text
