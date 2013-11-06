@@ -49,7 +49,6 @@ def wechat_auth():
         elif(MsgType == 'event'):
             Event = xml_recv.find("Event").text
             if(Event == 'subscribe'):
-                Content = xml_recv.find("Content").text
                 response = make_response(text_reply % \
                 (FromUserName, ToUserName, \
                 str(int(time.time())), 'Welcome to Gunner\'s WeiXin!') )
