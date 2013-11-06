@@ -50,9 +50,9 @@ def wechat_auth():
             Event = xml_recv.find("Event").text
             if(Event == 'subscribe'):
                 Content = xml_recv.find("Content").text
-                    response = make_response(text_reply % \
-                    (FromUserName, ToUserName, \
-                    str(int(time.time())), 'Welcome to Gunner\'s WeiXin!') )
+                response = make_response(text_reply % \
+                (FromUserName, ToUserName, \
+                str(int(time.time())), 'Welcome to Gunner\'s WeiXin!') )
                 response.content_type = 'application/xml'
                 return response
             elif(Event == 'unsubscribe'):
