@@ -4,12 +4,21 @@ from flask import request, make_response, Blueprint
 import hashlib
 from wx import app
 import xml.etree.ElementTree as ET
-
+import time
 
 view = Blueprint('view', __name__, template_folder='templates')
 
 @app.route('/', methods= ['GET', 'POST'])
 def wechat_auth():
+    
+    text_reply = "<xml><ToUserName><![CDATA[%s]]>" +\
+             "</ToUserName><FromUserName><![CDATA[%s]]>" +\
+             "</FromUserName><CreateTime>%s</CreateTime>" +\
+             "<MsgType><![CDATA[text]]>" +\
+             "</MsgType><Content><![CDATA[%s]]></Content>" +\
+             "<FuncFlag>0</FuncFlag></xml>"
+
+
     if request.method == 'GET':
         token = 'lazygunner'
         query = request.args
@@ -31,13 +40,16 @@ def wechat_auth():
 
         if(MsgType == "text"):
             Content = xml_recv.find("Content").text
-            reply = "<xml><ToUserName><![CDATA[%s]]>" +\
-                "</ToUserName><FromUserName><![CDATA[%s]]>" +\
-                "</FromUserName><CreateTime>%s</CreateTime>" +\
-                "<MsgType><![CDATA[text]]>" +\
-                "</MsgType><Content><![CDATA[%s]]></Content>" +\
-                "<FuncFlag>0</FuncFlag></xml>"
-            response = make_response(reply % (FromUserName, ToUserName, 
-            str(int(time.time())), 'HaHa:' + Content ) )
+            response = make_response(text_reply % \
+                (FromUserName, ToUserName, \
+                str(int(time.time())), 'HaHa:' + Content ) )
             response.content_type = 'application/xml'
             return response
+         elif(MsgType == 'subscribe'):
+            Content = xml_recv.find("Content").text
+            response = make_response(text_reply % \
+                (FromUserName, ToUserName, \
+                str(int(time.time())), 'Welcome to Gunner\'s WeiXin!') )
+            response.content_type = 'application/xml'
+            return response
+
