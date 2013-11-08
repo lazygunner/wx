@@ -119,7 +119,38 @@ class Weixin(object):
             echostr = request.args.get('echostr')
             return echostr
 
-        if 
+        try:
+            ret = self.parse(request.data)
+        except:
+            return 'invalid', 400
+
+        if 'type' not in ret:
+            return 'invalid', 400
+
+
+        if ret['type'] == 'text' and ret['content'] in self._registry:
+            func = self._registry[ret['registry']]
+        elif '*' in self._registry:
+            func = self._registry['*']
+        else:
+            func = 'failed'
+
+        if callable(func):
+            text = func(**ret)
+        else:
+            text = self.reply(
+                username = ret['sender'],
+                sender = ret['reciver'],
+                content = func,
+            )
+        return Response(text, content_type='text/xml;charset=utf-8')
+
+    view_func.methods = ['GET', 'POST']
+
+
+
+            
+
 
 
 
