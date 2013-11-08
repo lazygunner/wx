@@ -148,13 +148,13 @@ class Weixin(object):
 
     view_func.methods = ['GET', 'POST']
 
-    def text_reply(username, sender, content):
+def text_reply(username, sender, content):
         shared = _shared_reply(username, sender, 'text')
         template = '<xml>%s<Content><![CDATA[%s]]></Content></xml>'
         return template % (shared, content)
 
 
-    def music_reply(username, sender, **kwargs):
+def music_reply(username, sender, **kwargs):
         kwargs['shared'] = _shared_reply(username, sender, 'music')
 
         template = (
@@ -171,7 +171,7 @@ class Weixin(object):
         return template % kwargs
 
 
-    def news_reply(username, sender, *items):
+def news_reply(username, sender, *items):
         item_template = (
             '<item>'
             '<Title><![CDATA[%(title)s]]></Title>'
@@ -197,7 +197,7 @@ class Weixin(object):
         return template % dct
 
 
-    def _shared_reply(username, sender, type):
+def _shared_reply(username, sender, type):
         dct = {
             'username': username,
             'sender': sender,
