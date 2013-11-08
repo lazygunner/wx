@@ -66,7 +66,8 @@ class Weixin(object):
             ret['description'] = dic.get('Description')
             ret['url'] = dic.get('url')
             return ret
-
+        if type == 'event':
+            ret['event'] = dic.get('event')
         return ret
 
     def reply(self, username, type='text', sender=None, **kwargs):
@@ -147,9 +148,71 @@ class Weixin(object):
 
     view_func.methods = ['GET', 'POST']
 
+    def text_reply(username, sender, content):
+        shared = _shared_reply(username, sender, 'text')
+        template = '<xml>%s<Content><![CDATA[%s]]></Content></xml>'
+        return template % (shared, content)
 
 
-            
+    def music_reply(username, sender, **kwargs):
+        kwargs['shared'] = _shared_reply(username, sender, 'music')
+
+        template = (
+            '<xml>'
+            '%(shared)s'
+            '<Music>'
+            '<Title><![CDATA[%(title)s]]></Title>'
+            '<Description><![CDATA[%(description)s]]></Description>'
+            '<MusicUrl><![CDATA[%(music_url)s]]></MusicUrl>'
+            '<HQMusicUrl><![CDATA[%(hq_music_url)s]]></HQMusicUrl>'
+            '</Music>'
+            '</xml>'
+            )
+        return template % kwargs
+
+
+    def news_reply(username, sender, *items):
+        item_template = (
+            '<item>'
+            '<Title><![CDATA[%(title)s]]></Title>'
+            '<Description><![CDATA[%(description)s]]></Description>'
+            '<PicUrl><![CDATA[%(picurl)s]]></PicUrl>'
+            '<Url><![CDATA[%(url)s]]></Url>'
+            '</item>'
+        )
+        articles = map(lambda o: item_template % o, items)
+
+        template = (
+            '<xml>'
+            '%(shared)s'
+            '<ArticleCount>%(count)d</ArticleCount>'
+            '<Articles>%(articles)s</Articles>'
+            '</xml>'
+        )
+        dct = {
+            'shared': _shared_reply(username, sender, 'news'),
+            'count': len(items),
+            'articles': ''.join(articles)
+        }
+        return template % dct
+
+
+    def _shared_reply(username, sender, type):
+        dct = {
+            'username': username,
+            'sender': sender,
+            'type': type,
+            'timestamp': int(time.time()),
+        }
+        template = (
+            '<ToUserName><![CDATA[%(username)s]]></ToUserName>'
+            '<FromUserName><![CDATA[%(sender)s]]></FromUserName>'
+            '<CreateTime>%(timestamp)d</CreateTime>'
+            '<MsgType><![CDATA[%(type)s]]></MsgType>'
+        )
+        return template % dct
+
+
 
 
 
