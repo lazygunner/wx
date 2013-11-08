@@ -90,7 +90,7 @@ class Weixin(object):
 
         if type == 'news':
             items = kwargs.get('articles', [])
-            return news_reply(user_name, sender, *item)
+            return news_reply(username, sender, *item)
 
         return None
 
