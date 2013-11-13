@@ -14,21 +14,22 @@ db = MongoEngine(app)
 weixin = Weixin(app)
 app.add_url_rule('/', view_func=weixin.view_func)
 
-@weixin('梦见')
+@weixin(u'梦见')
 def reply_dream(**kwargs):
+
+    from model import *
     username = kwargs.get('sender')
     sender = kwargs.get('receiver')
     message_type = kwargs.get('type')
     content = kwargs.get('content', message_type)
     
-    dream_name = content.split(' ')[1]
-    print dream_name
-    if(dream_content != ''):
-        result = Dream.objects(dream_name = dream_name)
+    dream_name = content 
+    if(dream_name != ''):
+        result = DreamObject.objects(dream_name = dream_name)
         if(len(result) == 0):
-            dream_content = '找不到你的梦'
+            dream_content = u'找不到你的梦'
         else:
-            dream_content = result.dream_content
+            dream_content = result[0].dream_content
         return weixin.reply(
             username, sender=sender, content=dream_content
         )

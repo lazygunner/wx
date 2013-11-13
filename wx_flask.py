@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# coding: utf-8
 import time
 import hashlib
 
@@ -127,15 +129,14 @@ class Weixin(object):
 
         if 'type' not in ret:
             return 'invalid', 400
-
         commands = ret['content'].split(' ')
-        if len(commands) > 0:
-            command = commands[1]
-        else
+        if len(commands) > 1:
+            command = commands[0]
+            ret['content'] = commands[1]
+        else:
             command = ret['content']
-        print 'command: ' + command
         if ret['type'] == 'text' and command in self._registry:
-            func = self._registry[ret['registry']]
+            func = self._registry[command]
         elif '*' in self._registry:
             func = self._registry['*']
         else:
