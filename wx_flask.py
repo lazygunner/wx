@@ -128,8 +128,9 @@ class Weixin(object):
         if 'type' not in ret:
             return 'invalid', 400
 
-
-        if ret['type'] == 'text' and ret['content'] in self._registry:
+        command = ret['content'].split(' ')[1]
+        print 'command: ' + command
+        if ret['type'] == 'text' and command in self._registry:
             func = self._registry[ret['registry']]
         elif '*' in self._registry:
             func = self._registry['*']
