@@ -46,8 +46,7 @@ def reply_all(**kwargs):
     if message_type == 'event':
         if kwargs.get('event') == 'subscribe':
             return wexin.reply(
-                username, sender=sender, 
-                content="欢迎来到GUNNER闲扯平台！\n回复“梦见 XX”可以解梦！\n例如回复:\"梦见 小偷\"（\"梦见\"后面有空格）\n也可以给我留言哦！"
+                username, sender=sender, content="欢迎来到GUNNER闲扯平台！\n回复“梦见 XX”可以解梦！\n例如回复:\"梦见 小偷\"（\"梦见\"后面有空格）\n也可以给我留言哦！"
             )
 
     if content == 'news':
