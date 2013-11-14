@@ -138,7 +138,7 @@ class Weixin(object):
                 command = ret['content']
             if command in self._registry:
                 func = self._registry[command]
-            else
+            else:
                 func = self._registry['*']
         elif '*' in self._registry:
             func = self._registry['*']
