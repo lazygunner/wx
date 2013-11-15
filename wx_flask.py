@@ -2,6 +2,7 @@
 # coding: utf-8
 import time
 import hashlib
+from debug import save_text
 
 try:
     from lxml import etree
@@ -121,7 +122,7 @@ class Weixin(object):
         if request.method == 'GET':
             echostr = request.args.get('echostr')
             return echostr
-
+        save_text(request.data)
         try:
             ret = self.parse(request.data)
         except:
