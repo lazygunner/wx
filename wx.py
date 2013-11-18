@@ -41,15 +41,20 @@ def reply_all(**kwargs):
     sender = kwargs.get('receiver')
     message_type = kwargs.get('type')
     content = kwargs.get('content', message_type)
-
+    
     
     if message_type == 'event':
-        print content
-        print kwargs.get('event')
         if kwargs.get('event') == 'subscribe' or content == 'event':
             return weixin.reply(
                 username, sender=sender, content=u"欢迎来到GUNNER闲扯平台！\n回复“梦见 XX”可以解梦！\n例如回复:\"梦见 小偷\"（\"梦见\"后面有空格）\n也可以给我留言哦！"
             )
+    
+    if message_type == 'voice':
+        recognition = kwargs.get('Recongnition')
+        return weixin.reply(
+                username, sender=sender, content=recognition
+        )
+        
 
     if content == 'news':
         return weixin.reply(
