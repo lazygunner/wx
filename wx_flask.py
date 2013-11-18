@@ -70,7 +70,7 @@ class Weixin(object):
             ret['url'] = dic.get('url')
             return ret
         if type == 'event':
-            ret['event'] = dic.get('event')
+            ret['event'] = dic.get('Event')
         return ret
 
     def reply(self, username, type='text', sender=None, **kwargs):

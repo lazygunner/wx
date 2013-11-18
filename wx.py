@@ -45,7 +45,7 @@ def reply_all(**kwargs):
     
     
     if message_type == 'event':
-        event = kwargs.get('Event')
+        event = kwargs.get('event')
         if event == 'subscribe':
             user = User.objects.get(open_id = username)
             if user == None:
