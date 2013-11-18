@@ -17,7 +17,7 @@ app.add_url_rule('/', view_func=weixin.view_func)
 @weixin(u'梦见')
 def reply_dream(**kwargs):
 
-    from model import *
+    from model import DreamObject 
     username = kwargs.get('sender')
     sender = kwargs.get('receiver')
     message_type = kwargs.get('type')
@@ -37,6 +37,7 @@ def reply_dream(**kwargs):
 
 @weixin('*')
 def reply_all(**kwargs):
+    from model import User
     username = kwargs.get('sender')
     sender = kwargs.get('receiver')
     message_type = kwargs.get('type')
@@ -44,10 +45,18 @@ def reply_all(**kwargs):
     
     
     if message_type == 'event':
-        if kwargs.get('event') == 'subscribe' or content == 'event':
+        event = kwargs.get('Event')
+        if event == 'subscribe':
+            user = User.objects.get(open_id = username)
+            if user == None:
+                user = User()
+                user.open_id = username
+                user.save()
             return weixin.reply(
                 username, sender=sender, content=u"欢迎来到GUNNER闲扯平台！\n回复“梦见 XX”可以解梦！\n例如回复:\"梦见 小偷\"（\"梦见\"后面有空格）\n也可以给我留言哦！"
             )
+        elif event == 'unsubscribe':
+            pass
     
     if message_type == 'voice':
         recognition = kwargs.get('Recongnition')
