@@ -59,7 +59,7 @@ def reply_all(**kwargs):
             pass
     
     if message_type == 'voice':
-        recognition = kwargs.get('Recongnition')
+        recognition = kwargs.get('Recognition')
         return weixin.reply(
                 username, sender=sender, content=recognition
         )
