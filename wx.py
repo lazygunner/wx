@@ -48,7 +48,7 @@ def reply_all(**kwargs):
         event = kwargs.get('event')
         if event == 'subscribe':
             user = User.objects(open_id = username)
-            if len(user) > 0:
+            if len(user) == 0:
                 user = User()
                 user.open_id = username
                 user.save()
