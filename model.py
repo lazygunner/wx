@@ -7,7 +7,7 @@ class User(db.Document):
     user_name = db.StringField(max_length=255)
     current_game = db.StringField(max_length=255)
     point = db.IntFiled(default=0)
-    created-at = db.DateiTimeField(default=datetime.datetime.now, required=True)
+    created_at = db.DateiTimeField(default=datetime.datetime.now, required=True)
 
 class DreamObject(db.Document):
     dream_name = db.StringField(max_length=255, required=True)
