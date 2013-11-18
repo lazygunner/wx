@@ -71,6 +71,11 @@ class Weixin(object):
             return ret
         if type == 'event':
             ret['event'] = dic.get('Event')
+            return ret
+
+        if type == 'voice':
+            ret['recognition'] = dic.get('Recognition')
+            return ret
         return ret
 
     def reply(self, username, type='text', sender=None, **kwargs):
