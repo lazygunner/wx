@@ -120,7 +120,7 @@ def reply_all(**kwargs):
             if game['name'] == 'guess_num':
                 guess_num = GuessNum(game['num'], int(game['count']), game['state'])
                 content = guess_num.game_routine(int(content))
-                game['count'] = guess_num.count
+                game['count'] = str(guess_num.count)
                 game['state'] = guess_num.state
                 if(game['state'] == 'finished'):
                     game['name'] = ''
