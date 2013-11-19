@@ -56,17 +56,18 @@ def reply_game(**kwargs):
             username, sender=sender, content=u'回复\"猜数字\"开始按照GUNNER提示进行猜数字！')
 
 @weixin(u'猜数字')
-def reply_guess_num():
+def reply_guess_num(**kwargs):
+    from model import User
     username = kwargs.get('sender')
     sender = kwargs.get('receiver')
     user = User.objects.get(open_id = username)
     guess_num = GuessNum()
-    content = guess_num.start()
-    guess_num_s = {count:guess_num.count,num:guess_num.num}
+    content = guess_num.game_routine()
+    guess_num_s = {'count':guess_num.count,'num':guess_num.num}
     user.current_game = json.dumps(guess_num_s)
     user.save()
 
-    return weixin.reply(username, sender, content)    
+    return weixin.reply(username, sender=sender, content=content)    
 
 @weixin('*')
 def reply_all(**kwargs):
