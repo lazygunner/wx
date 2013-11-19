@@ -63,7 +63,7 @@ def reply_guess_num(**kwargs):
     user = User.objects.get(open_id = username)
     guess_num = GuessNum()
     content = guess_num.game_routine()
-    guess_num_s = {'count':guess_num.count,'num':guess_num.num}
+    guess_num_s = {'name':guess_num.name,'count':guess_num.count,'num':guess_num.num, 'state':guess_num.state}
     user.current_game = json.dumps(guess_num_s)
     user.save()
 
@@ -113,13 +113,22 @@ def reply_all(**kwargs):
         )
     else:
         user = User.objects(open_id=username)
-        if len(user) > 0 content.isdigit():
+        if len(user) > 0 and content.isdigit():
             game_json = user[0].current_game
             game = json.loads(game_json)
+            print game
             if game['name'] == 'guess_num':
-                guess_num = GuessNum(game['num'], game['count'])
+                guess_num = GuessNum(game['num'], int(game['count']), game['state'])
                 content = guess_num.game_routine(int(content))
-
+                game['count'] = guess_num.count
+                game['state'] = guess_num.state
+                if(game['state'] == 'finished'):
+                    game['name'] = ''
+                print game
+                user[0].current_game = json.dumps(game)
+                user[0].save()
+            #if game['name'] == '':
+            #    content=u'请输入你要玩的游戏名！'
         return weixin.reply(
             username, sender=sender, content=content
         )
