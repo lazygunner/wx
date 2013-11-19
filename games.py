@@ -10,6 +10,9 @@ class GuessNum(Game):
     name = 'guess_num'
     num = 0
     count = 0
+    def __init__(self, num, count):
+        self.num = num
+        self.count = count
 
     def before_start(self):
         self.state = 'before_start'

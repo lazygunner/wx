@@ -112,6 +112,14 @@ def reply_all(**kwargs):
             ]
         )
     else:
+        user = User.objects(open_id=username)
+        if len(user) > 0 content.isdigit():
+            game_json = user[0].current_game
+            game = json.loads(game_json)
+            if game['name'] == 'guess_num':
+                guess_num = GuessNum(game['num'], game['count'])
+                content = guess_num.game_routine(int(content))
+
         return weixin.reply(
             username, sender=sender, content=content
         )
