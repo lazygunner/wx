@@ -2,6 +2,8 @@
 from flask import Flask
 from flask.ext.mongoengine import MongoEngine
 from wx_flask import Weixin
+from games import GuessNum
+import json
 
 app = Flask(__name__)
 app.config["MONGODB_SETTINGS"] = {'DB':"wx"}
@@ -53,6 +55,18 @@ def reply_game(**kwargs):
         return weixin.reply(
             username, sender=sender, content=u'回复\"猜数字\"开始按照GUNNER提示进行猜数字！')
 
+@weixin(u'猜数字')
+def reply_guess_num():
+    username = kwargs.get('sender')
+    sender = kwargs.get('receiver')
+    user = User.objects.get(open_id = username)
+    guess_num = GuessNum()
+    content = guess_num.start()
+    guess_num_s = {count:guess_num.count,num:guess_num.num}
+    user.current_game = json.dumps(guess_num_s)
+    user.save()
+
+    return weixin.reply(username, sender, content)    
 
 @weixin('*')
 def reply_all(**kwargs):
