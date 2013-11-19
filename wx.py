@@ -34,6 +34,25 @@ def reply_dream(**kwargs):
             username, sender=sender, content=dream_content
         )
 
+@weixin(u'游戏')
+def reply_game(**kwargs):
+    
+    from model import User 
+    username = kwargs.get('sender')
+    sender = kwargs.get('receiver')
+    message_type = kwargs.get('type')
+    content = kwargs.get('content', message_type)
+    
+    user = User.objects(open_id = username)
+    if len(user) == 0:
+        user = User()
+        user.open_id = username
+        user.save()
+
+    if message_type == 'text':
+        return weixin.reply(
+            username, sender=sender, content=u'回复\"猜数字\"开始按照GUNNER提示进行猜数字！')
+
 
 @weixin('*')
 def reply_all(**kwargs):
