@@ -116,17 +116,15 @@ def reply_all(**kwargs):
         if len(user) > 0 and content.isdigit():
             game_json = user[0].current_game
             game = json.loads(game_json)
-            print game
             if game['name'] == 'guess_num':
                 guess_num = GuessNum(game['num'], int(game['count']), game['state'])
                 content = guess_num.game_routine(int(content))
-                game['count'] = str(guess_num.count)
+                game['count'] = guess_num.count
                 game['state'] = guess_num.state
                 if(game['state'] == 'finished'):
                     game['name'] = ''
-                print game
-                user[0].current_game = json.dumps(game)
-                user[0].save()
+                j = json.dumps(game)
+                user[0].update(set__current_game=j)
             #if game['name'] == '':
             #    content=u'请输入你要玩的游戏名！'
         return weixin.reply(

@@ -12,7 +12,6 @@ class GuessNum(Game):
     num = 0
     count = 0
     def __init__(self, num=0, count=0, state='before_start'):
-        print count
         self.num = num
         self.count = count
         self.state = state
@@ -30,7 +29,6 @@ class GuessNum(Game):
         self.start()
     
     def game_routine(self,guess = 0):
-        print self.state        
         if self.state == 'before_start':
             self.start()
             return u'好吧开始猜吧！'
@@ -46,7 +44,7 @@ class GuessNum(Game):
                     return u'忒小了，请不要暴露你的尺寸！'
                 return u'小了，不过接近了！'
             else:
-                
+                self.count = self.count + 1
                 self.state = 'finished'
                 return u'恭喜你!猜对了!一共用了%d次' % self.count
         else:
