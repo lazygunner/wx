@@ -1,4 +1,4 @@
-import rand
+import random
 
 class Game(object):
     state = 'before_start'
@@ -7,37 +7,37 @@ class Game(object):
 
 
 class GuessNum(Game):
-    self.name = 'guess_num'
+    name = 'guess_num'
     num = 0
     count = 0
 
-    def before_start():
+    def before_start(self):
         self.state = 'before_start'
 
-    def start():
+    def start(self):
         self.state = 'start'
-        self.num = rand(9999)
+        self.num = random.randint(0,9999)
     
-    def restart():
+    def restart(self):
         self.count = 0
         self.num = 0
         self.start()
     
-    def game_routine(guess = 0):
+    def game_routine(self,guess = 0):
         
         if self.state == 'before_start':
             self.start()
             return 'Please guess your number!'
         elif self.state == 'start':
             if guess > self.num:
-                count = count + 1
+                self.count = self.count + 1
                 return 'big'
             elif guess < self.num:
-                count = count + 1
+                self.count = self.count + 1
                 return 'small'
             else:
                 
-                state = 'finished'
+                selfstate = 'finished'
                 return 'Congraduations!'
         else:
             self.restart()
