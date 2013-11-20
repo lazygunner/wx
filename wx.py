@@ -3,18 +3,23 @@ from flask import Flask
 from flask.ext.mongoengine import MongoEngine
 from wx_flask import Weixin
 from games import GuessNum
+from xiaoi_api import XiaoI
 import json
 
 app = Flask(__name__)
 app.config["MONGODB_SETTINGS"] = {'DB':"wx"}
 app.config["SECRET_KEY"] = "kalashinikov"
 app.config["WEIXIN_TOKEN"] = ""
+app.config["XIAOI_KEY"] = "aJin1z1o3rO4"
+app.config["XIAOI_SECRET"] = "iaYtLxk3P3dDlQBTH61i"
 
 
 db = MongoEngine(app)
 
 weixin = Weixin(app)
 app.add_url_rule('/', view_func=weixin.view_func)
+
+xiaoi = XiaoI(app)
 
 @weixin(u'梦见')
 def reply_dream(**kwargs):
@@ -127,6 +132,7 @@ def reply_all(**kwargs):
                 user[0].update(set__current_game=j)
             #if game['name'] == '':
             #    content=u'请输入你要玩的游戏名！'
+        content = xiaoi.chat(content, username)
         return weixin.reply(
             username, sender=sender, content=content
         )

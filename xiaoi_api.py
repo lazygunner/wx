@@ -25,12 +25,10 @@ class XiaoI(object):
         method = "POST"
         uri = "/robot/ask.do"
         random_str = ''.join(map(lambda xx:(hex(ord(xx))[2:]), os.urandom(20)))      
-        print random_str
         self.nonce = random_str
         ha1 = hashlib.sha1(self.app_key + ':' + realm + ':' + self.app_secret).hexdigest()
         ha2 = hashlib.sha1(method + ':' + uri).hexdigest()
         self.sign = hashlib.sha1(ha1 + ':' + self.nonce + ':' + ha2).hexdigest()
-        print self.sign
 
     def chat(self, question, user_id):
         
