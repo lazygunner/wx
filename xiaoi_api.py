@@ -1,6 +1,7 @@
 import requests
 import hashlib
 import os
+from urllib2 import quote
 
 class XiaoI(object):
     app_key = ""
@@ -34,7 +35,7 @@ class XiaoI(object):
         
         api_uri = "http://nlp.xiaoi.com/robot/ask.do"
 
-        payload = "question=" + question\
+        payload = "question=" + quote(question.encode('utf-8'))\
             + "&userId=" + user_id + "&platform=" + self.plateform\
             + "&type=" + str(self.api_type)
 
