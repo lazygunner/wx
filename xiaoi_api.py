@@ -47,7 +47,7 @@ class XiaoI(object):
 
         r = requests.post(api_uri, data=payload, headers=headers)
         content = r.text.replace(u'小i', self.name)
-        content = r.text.replace('Xiao i', self.name)
+        content = content.replace('Xiao i', self.name)
         return content
         
 
