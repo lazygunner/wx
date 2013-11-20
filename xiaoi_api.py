@@ -1,3 +1,4 @@
+# coding:utf-8
 import requests
 import hashlib
 import os
@@ -7,10 +8,11 @@ class XiaoI(object):
     app_key = ""
     app_secret = ""
     plateform = "custom"
-    api_type = 0
+    api_type = "0"
     nonce = ""
     sign = ""
-    
+    name = "GUNNER"
+
     def __init__(self, app):
         if hasattr(app, 'config'):
             config = app.config
@@ -37,14 +39,15 @@ class XiaoI(object):
 
         payload = "question=" + quote(question.encode('utf-8'))\
             + "&userId=" + user_id + "&platform=" + self.plateform\
-            + "&type=" + str(self.api_type)
+            + "&type=" + self.api_type 
 
         xauth = 'app_key="' + self.app_key + '",nonce="' + self.nonce + '",signature="' + self.sign + '"'
 
         headers = {"X-AUTH":xauth, "content-type":"application/x-www-form-urlencoded"}
 
         r = requests.post(api_uri, data=payload, headers=headers)
-        
-        return r.text
+        content = r.text.replace(u'小i', self.name)
+        content = r.text.replace('Xiao i', self.name)
+        return content
         
 
