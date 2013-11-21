@@ -132,7 +132,8 @@ def reply_all(**kwargs):
                 user[0].update(set__current_game=j)
             #if game['name'] == '':
             #    content=u'请输入你要玩的游戏名！'
-        content = xiaoi.chat(content, username)
+        else:
+            content = xiaoi.chat(content, username)
         return weixin.reply(
             username, sender=sender, content=content
         )
