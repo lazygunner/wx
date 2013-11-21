@@ -92,7 +92,7 @@ def reply_all(**kwargs):
                 user.open_id = username
                 user.save()
             return weixin.reply(
-                username, sender=sender, content=u"欢迎来到GUNNER闲扯平台！\n回复“梦见 XX”可以解梦！\n例如回复:\"梦见 小偷\"（\"梦见\"后面有空格）\n回复\"游戏\"可以玩游戏\n也可以给我留言哦！"
+                username, sender=sender, content=u"欢迎来到GUNNER闲扯平台！\n回复“梦见 XX”可以解梦！\n例如回复:\"梦见 小偷\"（\"梦见\"后面有空格）\n回复\"游戏\"可以玩游戏!\n闲的蛋疼可以聊天！\n也可以给我留言哦！"
             )
         elif event == 'unsubscribe':
             pass
