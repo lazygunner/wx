@@ -10,6 +10,7 @@ class User(db.Document):
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
     checked_at = db.DateTimeField(default=datetime.datetime.now, required=True)
     check_count = db.IntField(default=0)
+    nickname = db.StringField(default='')
 
 class DreamObject(db.Document):
     dream_name = db.StringField(max_length=255, required=True)
