@@ -40,19 +40,23 @@ def reply_check(**kwargs):
     else:
         try:
             last_checked_day = user[0].checked_at.replace(hour=0,minute=0,second=0,microsecond=0)
+            print last_checked_day
+            delta_min = (datetime.datetime.now() - last_checked_day).seconds/60
+            print delta_min
+            if delta_min < 24*60:
+                content=u'今日已签过了, 已连续签到%d日' %user[0].check_count
+            elif delta_min < 48*60 and delta_hour >= 24*60:
+                user[0].update(inc__check_count=1)
+                content=u'签到完成, 已连续签到%d日' %user[0].check_count
+            else:
+                user[0].update(set__check_count=1)
+                content=u'签到完成, 已连续签到%d日' %user[0].check_count
+
         except:
             user[0].update(set__check_count=1)
-
-        delta_hour = (datetime.now - last_checked_day).hours
-        if  delta_hour < 24:
-            content='今日已签过了, 已连续签到%d日' %user[0].checker_count
-        elif delta_hour < 48 and delta_hour >= 24: 
-            user[0].update(inc__check_count=1)
-        else:
-            user[0].update(set__check_count=1)
+            content=u'签到完成, 已连续签到%d日' %user[0].check_count
         
         finally:
-            content='签到完成, 已连续签到%d日' %user[0].checker_count
             user[0].update(set__checked_at=datetime.datetime.now())
         
             return weixin.reply(
