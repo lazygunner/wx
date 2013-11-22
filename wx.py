@@ -30,7 +30,7 @@ def reply_check(**kwargs):
     message_type = kwargs.get('type')
     content = kwargs.get('content', message_type)
    
-    users = User.objects().order_by('point')[:10]
+    users = User.objects.order_by('-point')[:10]
     i = 1
     content = ''
     for user in users:
