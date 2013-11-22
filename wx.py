@@ -22,6 +22,24 @@ app.add_url_rule('/', view_func=weixin.view_func)
 
 xiaoi = XiaoI(app)
 
+@weixin(u'积分榜')
+def reply_check(**kwargs):
+    from model import User 
+    username = kwargs.get('sender')
+    sender = kwargs.get('receiver')
+    message_type = kwargs.get('type')
+    content = kwargs.get('content', message_type)
+   
+    users = User.objects().order_by('point')[:10]
+    i = 1
+    content = ''
+    for user in users:
+        content = content + u'%d.%s | %d分\n' %(i, user.nickname, user.point)
+        i = i + 1
+    return weixin.reply(
+        username, sender=sender, content=content
+    )   
+
 @weixin(u'积分')
 def reply_check(**kwargs):
     from model import User 
