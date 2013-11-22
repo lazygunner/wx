@@ -8,6 +8,8 @@ class User(db.Document):
     current_game = db.StringField(max_length=255)
     point = db.IntField(default=0)
     created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
+    checked_at = db.DateTimeField(default=datetime.datetime.now, required=True)
+    check_count = db.IntField(default=0)
 
 class DreamObject(db.Document):
     dream_name = db.StringField(max_length=255, required=True)
