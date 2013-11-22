@@ -5,6 +5,7 @@ from wx_flask import Weixin
 from games import GuessNum
 from xiaoi_api import XiaoI
 import json
+import datetime
 
 app = Flask(__name__)
 app.config["MONGODB_SETTINGS"] = {'DB':"wx"}
@@ -20,6 +21,39 @@ weixin = Weixin(app)
 app.add_url_rule('/', view_func=weixin.view_func)
 
 xiaoi = XiaoI(app)
+
+
+@weixin(u'签到')
+def reply_check(**kwargs):
+    from model import User 
+    username = kwargs.get('sender')
+    sender = kwargs.get('receiver')
+    message_type = kwargs.get('type')
+    content = kwargs.get('content', message_type)
+   
+    user = User.objects(open_id = username)
+    if len(user) == 0:
+        user = User()
+        user.open_id = username
+        user.check_count = 1
+        user.save()
+    else:
+        day_begin = datetime.datetime.replace(hour=0,minute=0,second=0,microsecond=0)
+        last_checked_day = user[0].checked_at.replace(hour=0,minute=0,second=0,microsecond=0)
+        delta_hour = (datetime.now - last_checked_day).hours
+        if  delta_hour < 24:
+            content='今日已签过了, 已连续签到%d日' %user[0].checker_count
+        elif delta_hour < 48 and delta_hour >= 24: 
+            user[0].update(inc__check_count=1)
+        else:
+            user[0].update(set__check_count=1)
+        content='签到完成, 已连续签到%d日' %user[0].checker_count
+        user[0].update(set__checked_at=datetime.datetime.now())
+        
+        return weixin.reply(
+            username, sender=sender, content=content
+        )
+
 
 @weixin(u'梦见')
 def reply_dream(**kwargs):
