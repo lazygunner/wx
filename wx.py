@@ -38,8 +38,11 @@ def reply_check(**kwargs):
         user.check_count = 1
         user.save()
     else:
-        day_begin = datetime.datetime.replace(hour=0,minute=0,second=0,microsecond=0)
-        last_checked_day = user[0].checked_at.replace(hour=0,minute=0,second=0,microsecond=0)
+        try:
+            last_checked_day = user[0].checked_at.replace(hour=0,minute=0,second=0,microsecond=0)
+        except:
+            user[0].update(set__check_count=1)
+
         delta_hour = (datetime.now - last_checked_day).hours
         if  delta_hour < 24:
             content='今日已签过了, 已连续签到%d日' %user[0].checker_count
@@ -47,12 +50,14 @@ def reply_check(**kwargs):
             user[0].update(inc__check_count=1)
         else:
             user[0].update(set__check_count=1)
-        content='签到完成, 已连续签到%d日' %user[0].checker_count
-        user[0].update(set__checked_at=datetime.datetime.now())
         
-        return weixin.reply(
-            username, sender=sender, content=content
-        )
+        finally:
+            content='签到完成, 已连续签到%d日' %user[0].checker_count
+            user[0].update(set__checked_at=datetime.datetime.now())
+        
+            return weixin.reply(
+                username, sender=sender, content=content
+            )   
 
 
 @weixin(u'梦见')
