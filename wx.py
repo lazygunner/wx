@@ -53,6 +53,7 @@ def reply_check(**kwargs):
     else:
         try:
             last_checked_day = user[0].checked_at.replace(hour=0,minute=0,second=0,microsecond=0)
+            c = user[0].check_count
             delta = datetime.datetime.now() - last_checked_day
             delta_days = delta.days
             if delta_days < 1:
