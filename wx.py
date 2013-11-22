@@ -22,8 +22,21 @@ app.add_url_rule('/', view_func=weixin.view_func)
 
 xiaoi = XiaoI(app)
 
+@weixin(u'积分')
+def reply_check(**kwargs):
+    from model import User 
+    username = kwargs.get('sender')
+    sender = kwargs.get('receiver')
+    message_type = kwargs.get('type')
+    content = kwargs.get('content', message_type)
+   
+    user = User.objects.get(open_id = username)
+    content = u'当前积分为%d' %user.point
+    return weixin.reply(
+        username, sender=sender, content=content
+    )   
 
-@weixin(u'签到')
+
 def reply_check(**kwargs):
     from model import User 
     username = kwargs.get('sender')
@@ -47,13 +60,16 @@ def reply_check(**kwargs):
             elif delta_days < 2 and delta_days >= 1:
                 user[0].update(inc__check_count=1)
                 content=u'签到完成, 已连续签到%d日' %user[0].check_count
+                user[0].update(inc__point=user[0].check_count)
             else:
                 user[0].update(set__check_count=1)
                 content=u'签到完成, 已连续签到%d日' %user[0].check_count
+                user[0].update(inc__point=user[0].check_count)
 
         except:
             user[0].update(set__check_count=1)
             content=u'签到完成, 已连续签到%d日' %user[0].check_count
+            user[0].update(inc__point=user[0].check_count)
         
         finally:
             user[0].update(set__checked_at=datetime.datetime.now())
@@ -170,6 +186,13 @@ def reply_all(**kwargs):
                 game['state'] = guess_num.state
                 if(game['state'] == 'finished'):
                     game['name'] = ''
+                    count = 15 - guess_num.count
+                    if count < 0:
+                        count = 0
+                    point = count * 10
+                    useri[0].update(inc__point=point)
+                    content = content + u'\n本次获得%d点积分' %point
+
                 j = json.dumps(game)
                 user[0].update(set__current_game=j)
             #if game['name'] == '':
