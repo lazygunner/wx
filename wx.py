@@ -40,12 +40,11 @@ def reply_check(**kwargs):
     else:
         try:
             last_checked_day = user[0].checked_at.replace(hour=0,minute=0,second=0,microsecond=0)
-            print last_checked_day
-            delta_min = (datetime.datetime.now() - last_checked_day).seconds/60
-            print delta_min
-            if delta_min < 24*60:
+            delta = datetime.datetime.now() - last_checked_day
+            delta_days = delta.days
+            if delta_days < 1:
                 content=u'今日已签过了, 已连续签到%d日' %user[0].check_count
-            elif delta_min < 48*60 and delta_hour >= 24*60:
+            elif delta_days < 2 and delta_days >= 1:
                 user[0].update(inc__check_count=1)
                 content=u'签到完成, 已连续签到%d日' %user[0].check_count
             else:
