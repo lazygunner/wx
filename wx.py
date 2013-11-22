@@ -150,7 +150,7 @@ def reply_all(**kwargs):
                 user.open_id = username
                 user.save()
             return weixin.reply(
-                username, sender=sender, content=u"欢迎来到GUNNER闲扯平台！\n回复“梦见 XX”可以解梦！\n例如回复:\"梦见 小偷\"（\"梦见\"后面有空格）\n回复\"游戏\"可以玩游戏!\n闲的蛋疼可以聊天！\n也可以给我留言哦！"
+                username, sender=sender, content=u"欢迎来到GUNNER闲扯平台！\n回复“梦见 XX”可以解梦！\n例如回复:\"梦见 小偷\"（\"梦见\"后面有空格）\n回复\"游戏\"可以玩游戏!游戏有积分！\n回复【签到】,每天进行签到，签到有积分！\n回复【积分】查看积分\n闲的蛋疼可以聊天！\n也可以给我留言哦！"
             )
         elif event == 'unsubscribe':
             pass
@@ -187,10 +187,10 @@ def reply_all(**kwargs):
                 if(game['state'] == 'finished'):
                     game['name'] = ''
                     count = 15 - guess_num.count
-                    if count < 0:
-                        count = 0
+                    if count <= 0:
+                        count = 0.1
                     point = count * 10
-                    useri[0].update(inc__point=point)
+                    user[0].update(inc__point=point)
                     content = content + u'\n本次获得%d点积分' %point
 
                 j = json.dumps(game)
