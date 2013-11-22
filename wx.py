@@ -36,7 +36,7 @@ def reply_check(**kwargs):
         username, sender=sender, content=content
     )   
 
-
+@weixin(u'签到')
 def reply_check(**kwargs):
     from model import User 
     username = kwargs.get('sender')
