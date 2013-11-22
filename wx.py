@@ -22,8 +22,25 @@ app.add_url_rule('/', view_func=weixin.view_func)
 
 xiaoi = XiaoI(app)
 
+
+@weixin(u'名字')
+def reply_name(**kwargs):
+    from model import User 
+    username = kwargs.get('sender')
+    sender = kwargs.get('receiver')
+    message_type = kwargs.get('type')
+    content = kwargs.get('content', message_type)
+    print content
+    user = User.objects.get(open_id=username)
+    user.update(set__nickname=content)
+
+    content = u'名字设置成功:%s' %content
+    return weixin.reply(
+        username, sender=sender, content=content
+    )   
+
 @weixin(u'积分榜')
-def reply_check(**kwargs):
+def reply_point(**kwargs):
     from model import User 
     username = kwargs.get('sender')
     sender = kwargs.get('receiver')
@@ -36,6 +53,7 @@ def reply_check(**kwargs):
     for user in users:
         content = content + u'%d.%s | %d分\n' %(i, user.nickname, user.point)
         i = i + 1
+    content = content + u'如果没有显示你的名字，可以通过回复【名字 XXX】来设置名字!（中间有空格哦！）'
     return weixin.reply(
         username, sender=sender, content=content
     )   
