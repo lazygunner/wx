@@ -41,5 +41,5 @@ def get_new():
     p_requests = threadpool.makeRequests(get_duanzi, array)
     [pool.putRequest(req) for req in p_requests]
     pool.wait()
-
+    print 'finished'
 get_new()    

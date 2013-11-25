@@ -34,11 +34,15 @@ def reply_duanzi(**kwargs):
     count = Duanzi.objects.count()
     print count
     skip = random.randint(0, count)
-    duanzi = Duanzi.objects.skip(count).limit(1)
+    duanzi = Duanzi.objects.skip(skip).limit(1)
     print duanzi
+    if len(duanzi) > 0:
+        content = duanzi[0].content
+    else:
+        content = ''
     
     return weixin.reply(
-        username, sender=sender, content=duanzi.content
+        username, sender=sender, content=content
     )   
 
 
