@@ -22,6 +22,25 @@ app.add_url_rule('/', view_func=weixin.view_func)
 
 xiaoi = XiaoI(app)
 
+@weixin(u'段子')
+def reply_duanzi(**kwargs):
+    from model import Duanzi 
+    import random
+    username = kwargs.get('sender')
+    sender = kwargs.get('receiver')
+    message_type = kwargs.get('type')
+    content = kwargs.get('content', message_type)
+    
+    count = Duanzi.objects.count()
+    print count
+    skip = random.randint(0, count)
+    duanzi = Duanzi.objects.skip(count).limit(1)
+    print duanzi
+    
+    return weixin.reply(
+        username, sender=sender, content=duanzi.content
+    )   
+
 
 @weixin(u'名字')
 def reply_name(**kwargs):
