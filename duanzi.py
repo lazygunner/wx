@@ -22,20 +22,19 @@ def get_duanzi(page_id):
     for duanzi in duanzi_array:
         d = Duanzi()
         d.page = int(page_id)
+        duanzi = duanzi.replace('<br />;', '')
         d.content = duanzi.encode('utf-8')
         d.save()
 
 def get_new():
     r = requests.get(duanzi_uri)
     p = re.compile(r'id="post-(\d*?)"')
-    print p.findall(r.text)
     latest = int(p.findall(r.text)[0])
     begin = Duanzi.objects.order_by('-page').first()
     if begin == None:
         begin = 0
     
     array = [((), {'page_id':str(i)}) for i in range(begin, latest)]
-    print array
 
     pool = threadpool.ThreadPool(5)
     p_requests = threadpool.makeRequests(get_duanzi, array)
