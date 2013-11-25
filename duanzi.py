@@ -22,7 +22,7 @@ def get_duanzi(page_id):
     for duanzi in duanzi_array:
         d = Duanzi()
         d.page = int(page_id)
-        duanzi = duanzi.replace('<br />;', '')
+        duanzi = duanzi.replace('<br />', '')
         d.content = duanzi.encode('utf-8')
         d.save()
 
@@ -32,7 +32,7 @@ def get_new():
     latest = int(p.findall(r.text)[0])
     begin = Duanzi.objects.order_by('-page').first()
     if begin == None:
-        begin = 0
+        begin = 1000
     
     array = [((), {'page_id':str(i)}) for i in range(begin, latest)]
 
