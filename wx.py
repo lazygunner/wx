@@ -30,7 +30,6 @@ def reply_name(**kwargs):
     sender = kwargs.get('receiver')
     message_type = kwargs.get('type')
     content = kwargs.get('content', message_type)
-    print content
     user = User.objects.get(open_id=username)
     user.update(set__nickname=content)
 
