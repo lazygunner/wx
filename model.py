@@ -20,4 +20,6 @@ class DreamObject(db.Document):
         'indexes': ['dream_name']
     }
 
-
+class Duanzi(db.Document):
+    page = db.IntField(required=True)
+    content = db.StringField(required=True)
